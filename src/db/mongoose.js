@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const validator = require('validator')
 
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
   useNewUrlParser: true,
@@ -9,20 +10,52 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
 
 const User = mongoose.model('User', {
   name: {
-    type: String
+    type: String,
+    required: true,
+    trim: true
   },
   age: {
-    type: Number
+    type: Number,
+    default:0,
+    validate(value) {
+      if(value < 0){
+        throw new Error('Age Must be > 0')
+      }
+    }
+  },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+    validate(value){
+      if(!validator.isEmail(value)){
+        throw new Error('Not Valid Email')
+      }
+    }
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minLength: 7,
+    validate(value){
+      if(value.toLowerCase().includes("password")){
+        throw new Error("Password can't contain 'password' ");
+      }
+    }
+
   }
 })
 
 //New User Added with promise
 
 // const newUser = new User({
-//   name: "Cormac Levins",
-//   age: 21
+//   name: "Jim Levins    ",
+//   email: "JIM@OUYTLOOK.IE",
+//   password: "password"
 // })
-
+//
 // newUser.save().then( () => {
 //   console.log(newUser);
 // }).catch( (error) => {
@@ -33,10 +66,13 @@ const User = mongoose.model('User', {
 
 const Task = mongoose.model('Tasks', {
   desc: {
-    type: String
+    type: String,
+    required: true,
+    trim: true
   },
   complete: {
-    type: Boolean
+    type: Boolean,
+    default: false
   }
 })
 

@@ -1,7 +1,7 @@
 const { MongoClient, ObjectID } = require('mongodb');
 
 // dorect to bin folder in mongodb
-//run mongod --port 27017 --dbpath C:\users\corma\mongodb-data
+//mongod --port 27017 --dbpath C:\users\corma\mongodb-data
 
 //init db
 const connectionURL = 'mongodb://127.0.0.1:27017';
